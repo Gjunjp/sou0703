@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>曾桑＆溫桑的採訪練習與文法測驗 🌾🍍</title>
+    
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 引入 Google Fonts: M PLUS Rounded 1c (可愛日文字體) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['"M PLUS Rounded 1c"', 'sans-serif'],
+                    },
+                    colors: {
+                        'rice': '#FFF8E7',
+                        'matcha': '#8B9A46',
+                        'pineapple': '#F4D160',
+                        'brown-text': '#5C4033'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAFAFA;
+            background-image: radial-gradient(#F4D160 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #5C4033;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(139, 154, 70, 0.2), 0 4px 6px -2px rgba(139, 154, 70, 0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 自訂可愛的單選框 */
+        input[type="radio"] {
+            appearance: none;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid #8B9A46;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+            background-color: white;
+            transition: all 0.2s;
+        }
+        input[type="radio"]:checked {
+            background-color: #8B9A46;
+            border-color: #8B9A46;
+        }
+        input[type="radio"]:checked::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background-color: white;
+        }
+        /* 加入Ruby標音的樣式 */
+        ruby { font-family: 'M PLUS Rounded 1c', sans-serif; }
+        rt { color: #8B9A46; font-size: 0.6em; font-weight: bold; }
+    </style>
+</head>
+<body class="antialiased min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <!-- 標題區塊 -->
+        <header class="text-center mb-10 bg-white p-8 rounded-3xl card-shadow border-4 border-rice">
+            <h1 class="text-3xl sm:text-4xl font-bold text-matcha mb-4">
+                🌾 曾桑＆溫桑のインタビュー 🍍
+            </h1>
+            <p class="text-lg text-brown-text font-medium">
+                日文採訪與文法練習：米餅與米鳳梨酥的魅力
+            </p>
+            <div class="mt-4 flex justify-center gap-2 text-2xl">
+                <span>🍚</span><span>🍍</span><span>🍘</span><span>✨</span>
+            </div>
+        </header>
+
+        <!-- 內容容器 (將由 JS 動態生成) -->
+        <main id="app-content" class="space-y-12">
+            <!-- 內容將在這裡生成 -->
+        </main>
+
+        <footer class="text-center mt-12 text-sm text-gray-500 font-medium">
+            <p>頑張ってください！ (加油！)</p>
+        </footer>
+    </div>
+
+    <script>
+        // 採訪問題資料 (10題)
+        const interviewData = [
+            {
+                q_jp: "Q1. <ruby>曾<rt>そう</rt></ruby>さんと<ruby>温<rt>おん</rt></ruby>さんの<ruby>会社<rt>かいしゃ</rt></ruby>は、どんな<ruby>会社<rt>かいしゃ</rt></ruby>ですか。",
+                q_tw: "曾桑跟溫桑的公司，是一間怎麼樣的公司呢？ (提示：～を売っている・作っている会社)",
+                hints: [
+                    "<ruby>台湾<rt>たいわん</rt></ruby>のお<ruby>米<rt>こめ</rt></ruby>を<ruby>売<rt>う</rt></ruby>っている<ruby>会社<rt>かいしゃ</rt></ruby>です。",
+                    "お<ruby>米<rt>こめ</rt></ruby>のお<ruby>菓子<rt>かし</rt></ruby>を<ruby>作<rt>つく</rt></ruby>っている<ruby>会社<rt>かいしゃ</rt></ruby>です。"
+                ]
+            },
+            {
+                q_jp: "Q2. どうして<ruby>花蓮<rt>かれん</rt></ruby>と<ruby>台東<rt>たいとう</rt></ruby>の<ruby>米<rt>こめ</rt></ruby>を<ruby>売<rt>う</rt></ruby>っているんですか。",
+                q_tw: "為什麼會選擇販售花蓮跟台東的米呢？ (N4: ～んです)",
+                hints: [
+                    "<ruby>水<rt>みず</rt></ruby>がきれいで、お<ruby>米<rt>こめ</rt></ruby>が<ruby>美味<rt>おい</rt></ruby>しいんです。",
+                    "<ruby>台湾<rt>たいわん</rt></ruby>で<ruby>一番<rt>いちばん</rt></ruby>いいお<ruby>米<rt>こめ</rt></ruby>なんですよ。"
+                ]
+            },
+            {
+                q_jp: "Q3. お<ruby>米<rt>こめ</rt></ruby>のパイナップルケーキは、<ruby>普通<rt>ふつう</rt></ruby>のものと<ruby>何<rt>なに</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>いますか。",
+                q_tw: "米做的鳳梨酥，跟一般的鳳梨酥有什麼不一樣呢？",
+                hints: [
+                    "100％お<ruby>米<rt>こめ</rt></ruby>で<ruby>作<rt>つく</rt></ruby>ったグルテンフリーです。",
+                    "<ruby>食<rt>た</rt></ruby>べると、お<ruby>米<rt>こめ</rt></ruby>のいい<ruby>香<rt>かお</rt></ruby>りがします。"
+                ]
+            },
+            {
+                q_jp: "Q4. お<ruby>米<rt>こめ</rt></ruby>のパフはどうやって<ruby>作<rt>つく</rt></ruby>るんですか。",
+                q_tw: "米香(蓬發米餅)是怎麼做出來的呢？ (N5: どうやって / N4: ～んです)",
+                hints: [
+                    "<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>機械<rt>きかい</rt></ruby>で、お<ruby>米<rt>こめ</rt></ruby>を<ruby>大<rt>おお</rt></ruby>きくするんです。",
+                    "<ruby>油<rt>あぶら</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わないから、<ruby>健康的<rt>けんこうてき</rt></ruby>なんです。"
+                ]
+            },
+            {
+                q_jp: "Q5. お<ruby>米<rt>こめ</rt></ruby>のパイナップルケーキは、どんな<ruby>人<rt>ひと</rt></ruby>に<ruby>一番<rt>いちばん</rt></ruby><ruby>人気<rt>にんき</rt></ruby>がありますか。",
+                q_tw: "米做的鳳梨酥，最受什麼樣的人歡迎呢？ (N4: ～に人気がある)",
+                hints: [
+                    "アレルギーがある<ruby>人<rt>ひと</rt></ruby>に<ruby>人気<rt>にんき</rt></ruby>があります。",
+                    "<ruby>健康<rt>けんこう</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけている<ruby>人<rt>ひと</rt></ruby>に<ruby>一番<rt>いちばん</rt></ruby><ruby>人気<rt>にんき</rt></ruby>です。"
+                ]
+            },
+            {
+                q_jp: "Q6. お<ruby>米<rt>こめ</rt></ruby>のパフを<ruby>美味<rt>おい</rt></ruby>しく<ruby>食<rt>た</rt></ruby>べるために、<ruby>何<rt>なに</rt></ruby>と<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>食<rt>た</rt></ruby>べたほうがいいですか。",
+                q_tw: "為了讓米餅更好吃，和什麼一起吃比較好呢？ (N4: ～ために / ～たほうがいい)",
+                hints: [
+                    "お<ruby>茶<rt>ちゃ</rt></ruby>と<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>食<rt>た</rt></ruby>べたほうがいいです。",
+                    "牛乳（ぎゅうにゅう）に<ruby>入<rt>い</rt></ruby>れて<ruby>食<rt>た</rt></ruby>べても<ruby>美味<rt>おい</rt></ruby>しいですよ。"
+                ]
+            },
+            {
+                q_jp: "Q7. お<ruby>客<rt>きゃく</rt></ruby>さんに<ruby>一番<rt>いちばん</rt></ruby><ruby>食<rt>た</rt></ruby>べてほしい<ruby>商品<rt>しょうひん</rt></ruby>はどれですか。",
+                q_tw: "最希望客人吃到（品嚐）的商品是哪一個呢？ (N4: ～てほしい)",
+                hints: [
+                    "パイナップルケーキを<ruby>食<rt>た</rt></ruby>べてほしいです。",
+                    "お<ruby>米<rt>こめ</rt></ruby>のパフもぜひ<ruby>食<rt>た</rt></ruby>べてみてほしいです。"
+                ]
+            },
+            {
+                q_jp: "Q8. これから、どんな<ruby>新<rt>あたら</rt></ruby>しい<ruby>商品<rt>しょうひん</rt></ruby>を<ruby>作<rt>つく</rt></ruby>りたいですか。",
+                q_tw: "今後，想要做出什麼樣的新商品呢？ (N4: ～たいと思っています)",
+                hints: [
+                    "<ruby>健康的<rt>けんこうてき</rt></ruby>な<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>作<rt>つく</rt></ruby>りたいと<ruby>思<rt>おも</rt></ruby>ってます。",
+                    "<ruby>安心<rt>あんしん</rt></ruby>して<ruby>食<rt>た</rt></ruby>べられるお<ruby>菓子<rt>かし</rt></ruby>を<ruby>作<rt>つく</rt></ruby>りたいです。"
+                ]
+            },
+            {
+                q_jp: "Q9. お<ruby>客<rt>きゃく</rt></ruby>さんに<ruby>商品<rt>しょうひん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べてから、どうしてもらいたいですか。",
+                q_tw: "客人吃完商品之後，希望他們怎麼做呢？ (N4: ～てから / ～てもらう)",
+                hints: [
+                    "「<ruby>食<rt>た</rt></ruby>べてから、<ruby>日本<rt>にほん</rt></ruby>へ<ruby>輸入<rt>ゆにゅう</rt></ruby>してもらいたいです。」",
+                    "「<ruby>食<rt>た</rt></ruby>べてから、たくさん<ruby>注文<rt>ちゅうもん</rt></ruby>してもらいたいです。」"
+                ]
+            },
+            {
+                q_jp: "Q10. これから、お<ruby>米<rt>こめ</rt></ruby>のパフをより<ruby>多<rt>おお</rt></ruby>くの<ruby>人<rt>ひと</rt></ruby>に<ruby>知<rt>し</rt></ruby>ってもらうために、どうするつもりですか。",
+                q_tw: "今後，為了讓更多人知道米餅，你們打算怎麼做呢？ (N4: ～てもらう / ～つもり)",
+                hints: [
+                    "インターネットでたくさん<ruby>紹介<rt>しょうかい</rt></ruby>するつもりです。",
+                    "<ruby>外国<rt>がいこく</rt></ruby>でも<ruby>売<rt>う</rt></ruby>りたいと<ruby>思<rt>おも</rt></ruby>っています。"
+                ]
+            }
+        ];
+
+        // 文法測驗資料 (5組，每組3題)
+        // 測驗範圍：て形、辞書形、た形 相關文法 (不使用單純的ます/ました)
+        const grammarData = [
+            // 測驗 1 (在 Q2 之後)
+            [
+                { q: "アレルギーがある<ruby>人<rt>ひと</rt></ruby>は、<ruby>小麦粉<rt>こむぎこ</rt></ruby>のお<ruby>菓子<rt>かし</rt></ruby>を（   ）。", options: ["<ruby>食<rt>た</rt></ruby>べてはいけません", "<ruby>食<rt>た</rt></ruby>べないで", "<ruby>食<rt>た</rt></ruby>べることができます"], ans: 0, exp: "「〜てはいけません」表示禁止（不可以做某事）。在此句為：有過敏的人不可以吃小麥粉的點心。" },
+                { q: "<ruby>健康<rt>けんこう</rt></ruby>のために、お<ruby>米<rt>こめ</rt></ruby>のパフを（   ）ことにしました。", options: ["<ruby>作<rt>つく</rt></ruby>って", "<ruby>作<rt>つく</rt></ruby>る", "<ruby>作<rt>つく</rt></ruby>った"], ans: 1, exp: "「辞書形 + ことにしました」表示自己決定的事情。" },
+                { q: "<ruby>疲<rt>つか</rt></ruby>れた<ruby>時<rt>とき</rt></ruby>は、<ruby>美味<rt>おい</rt></ruby>しいお<ruby>米<rt>こめ</rt></ruby>を（   ）ほうがいいですよ。", options: ["<ruby>食<rt>た</rt></ruby>べる", "<ruby>食<rt>た</rt></ruby>べて", "<ruby>食<rt>た</rt></ruby>べた"], ans: 2, exp: "「た形 + ほうがいいです」表示建議（做...比較好）。" }
+            ],
+            // 測驗 2 (在 Q4 之後)
+            [
+                { q: "この<ruby>新<rt>あたら</rt></ruby>しいお<ruby>米<rt>こめ</rt></ruby>のパフは、お<ruby>茶<rt>ちゃ</rt></ruby>と<ruby>一緒<rt>いっしょ</rt></ruby>に（   ）いいですよ。", options: ["<ruby>食<rt>た</rt></ruby>べても", "<ruby>食<rt>た</rt></ruby>べる", "<ruby>食<rt>た</rt></ruby>べた"], ans: 0, exp: "「〜てもいいです」表示許可（可以...）。" },
+                { q: "お<ruby>米<rt>こめ</rt></ruby>でパイナップルケーキを（   ）ができますか。", options: ["<ruby>作<rt>つく</rt></ruby>る", "<ruby>作<rt>つく</rt></ruby>ること", "<ruby>作<rt>つく</rt></ruby>ったこと"], ans: 1, exp: "「辞書形 + ことができます」表示能力或可能。" },
+                { q: "<ruby>今<rt>いま</rt></ruby>まで<ruby>花蓮<rt>かれん</rt></ruby>へ<ruby>美味<rt>おい</rt></ruby>しいお<ruby>米<rt>こめ</rt></ruby>を（   ）ことがありますか。", options: ["<ruby>買<rt>か</rt></ruby>い", "<ruby>買<rt>か</rt></ruby>う", "<ruby>買<rt>か</rt></ruby>いに<ruby>行<rt>い</rt></ruby>った"], ans: 2, exp: "「た形 + ことがあります」表示曾經有過的經驗。" }
+            ],
+            // 測驗 3 (在 Q6 之後)
+            [
+                { q: "<ruby>今<rt>いま</rt></ruby>、オーブンでパイナップルケーキを（   ）ところです。", options: ["<ruby>焼<rt>や</rt></ruby>いている", "<ruby>焼<rt>や</rt></ruby>く", "<ruby>焼<rt>や</rt></ruby>いた"], ans: 0, exp: "「て形 + いるところです」表示動作正在進行中。" },
+                { q: "<ruby>来年<rt>らいねん</rt></ruby>も<ruby>新<rt>あたら</rt></ruby>しい<ruby>商品<rt>しょうひん</rt></ruby>を（   ）つもりです。", options: ["<ruby>作<rt>つく</rt></ruby>って", "<ruby>作<rt>つく</rt></ruby>る", "<ruby>作<rt>つく</rt></ruby>った"], ans: 1, exp: "「辞書形 + つもりです」表示打算、計畫。" },
+                { q: "<ruby>週末<rt>しゅうまつ</rt></ruby>はお<ruby>米<rt>こめ</rt></ruby>を（   ）、お<ruby>菓子<rt>かし</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ったりします。", options: ["<ruby>売<rt>う</rt></ruby>る", "<ruby>売<rt>う</rt></ruby>って", "<ruby>売<rt>う</rt></ruby>ったり"], ans: 2, exp: "「た形り、た形りします」表示列舉代表性的動作。" }
+            ],
+            // 測驗 4 (在 Q8 之後)
+            [
+                { q: "この<ruby>新<rt>あたら</rt></ruby>しいお<ruby>米<rt>こめ</rt></ruby>のデザートを（   ）みてください。", options: ["<ruby>食<rt>た</rt></ruby>べて", "<ruby>食<rt>た</rt></ruby>べる", "<ruby>食<rt>た</rt></ruby>べた"], ans: 0, exp: "「て形 + みます」表示試著做做看。" },
+                { q: "お<ruby>米<rt>こめ</rt></ruby>のパフを（   ）<ruby>前<rt>まえ</rt></ruby>に、<ruby>手<rt>て</rt></ruby>を<ruby>洗<rt>あら</rt></ruby>わなければなりません。", options: ["<ruby>食<rt>た</rt></ruby>べて", "<ruby>食<rt>た</rt></ruby>べる", "<ruby>食<rt>た</rt></ruby>べた"], ans: 1, exp: "「辞書形 + 前に」表示在做某動作之前。" },
+                { q: "お<ruby>米<rt>こめ</rt></ruby>をきれいに（   ）<ruby>後<rt>あと</rt></ruby>で、<ruby>生地<rt>きじ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ります。", options: ["<ruby>洗<rt>あら</rt></ruby>って", "<ruby>洗<rt>あら</rt></ruby>う", "<ruby>洗<rt>あら</rt></ruby>った"], ans: 2, exp: "「た形 + 後で」表示在做完某動作之後。" }
+            ],
+            // 測驗 5 (在 Q10 之後)
+            [
+                { q: "<ruby>曾<rt>そう</rt></ruby>さんがお<ruby>客<rt>きゃく</rt></ruby>さんに<ruby>食<rt>た</rt></ruby>べ<ruby>方<rt>かた</rt></ruby>を（   ）くれました。", options: ["<ruby>教<rt>おし</rt></ruby>えて", "<ruby>教<rt>おし</rt></ruby>える", "<ruby>教<rt>おし</rt></ruby>えた"], ans: 0, exp: "「て形 + くれます」表示別人為我(或我方)做某事。" },
+                { q: "<ruby>毎日<rt>まいにち</rt></ruby>、<ruby>健康的<rt>けんこうてき</rt></ruby>なものを（   ）ようにしています。", options: ["<ruby>食<rt>た</rt></ruby>べる", "<ruby>食<rt>た</rt></ruby>べて", "<ruby>食<rt>た</rt></ruby>べた"], ans: 0, exp: "「辞書形 + ようにしています」表示努力保持某種習慣。" },
+                { q: "このお<ruby>米<rt>こめ</rt></ruby>のパフは、さっき（   ）ばかりですから、サクサクですよ。", options: ["<ruby>作<rt>つく</rt></ruby>る", "<ruby>作<rt>つく</rt></ruby>って", "<ruby>作<rt>つく</rt></ruby>った"], ans: 2, exp: "「た形 + ばかりです」表示動作剛剛完成沒多久。" }
+            ]
+        ];
+
+        const contentContainer = document.getElementById('app-content');
+
+        // 生成採訪問題卡片
+        function createInterviewCard(data, index) {
+            const cardId = `interview-${index}`;
+            const html = `
+                <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-pineapple"></div>
+                    <div class="mb-4">
+                        <h2 class="text-xl sm:text-2xl font-bold text-brown-text leading-relaxed">${data.q_jp}</h2>
+                        <p class="text-gray-500 mt-2 font-medium">${data.q_tw}</p>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <label class="block text-sm font-bold text-matcha mb-2">✏️ あなたの答え（自由發揮）</label>
+                        <textarea class="w-full border-2 border-amber-100 rounded-xl p-4 focus:outline-none focus:border-pineapple focus:ring-2 focus:ring-yellow-100 transition resize-none bg-rice" rows="3" placeholder="請先試著自己回答看看..."></textarea>
+                    </div>
+
+                    <div class="mt-6">
+                        <button onclick="toggleHints('${cardId}')" class="bg-matcha hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full transition transform hover:scale-105 shadow-md flex items-center gap-2">
+                            💡 參考選項
+                        </button>
+                    </div>
+
+                    <div id="hints-${cardId}" class="hidden mt-6 bg-yellow-50 rounded-xl p-5 border border-yellow-200 fade-in">
+                        <h3 class="text-sm font-bold text-amber-800 mb-3">參考回答（可以點擊練習唸出來）：</h3>
+                        <ul class="space-y-3">
+                            ${data.hints.map(hint => `
+                                <li class="flex items-start gap-2 text-brown-text">
+                                    <span class="text-pineapple mt-1">▶</span>
+                                    <span class="font-medium text-lg leading-relaxed">${hint}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            return html;
+        }
+
+        // 生成文法測驗卡片
+        function createGrammarQuizCard(quizSet, setIndex) {
+            let quizzesHtml = '';
+            
+            quizSet.forEach((quiz, qIndex) => {
+                const uniqueId = `quiz-${setIndex}-${qIndex}`;
+                quizzesHtml += `
+                    <div class="mb-8 last:mb-0 pb-6 border-b-2 border-dashed border-gray-200 last:border-0" id="container-${uniqueId}">
+                        <p class="text-lg font-bold text-brown-text mb-4">
+                            <span class="bg-matcha text-white px-3 py-1 rounded-full text-sm mr-2">Q${qIndex + 1}</span>
+                            ${quiz.q}
+                        </p>
+                        <div class="space-y-3 pl-2 sm:pl-6">
+                            ${quiz.options.map((opt, optIdx) => `
+                                <label class="flex items-center p-3 rounded-lg hover:bg-green-50 transition cursor-pointer border border-transparent hover:border-green-100">
+                                    <input type="radio" name="${uniqueId}" value="${optIdx}">
+                                    <span class="text-base font-medium text-gray-700">${opt}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                        
+                        <!-- 解答與解析區塊 (預設隱藏) -->
+                        <div id="result-${uniqueId}" class="hidden mt-4 p-4 rounded-xl text-sm font-medium fade-in">
+                        </div>
+                    </div>
+                `;
+            });
+
+            const html = `
+                <div class="bg-rice rounded-3xl p-6 sm:p-8 card-shadow border-2 border-matcha relative">
+                    <div class="absolute -top-4 right-6 bg-matcha text-white px-4 py-1 rounded-full font-bold shadow-md">
+                        📝 息抜き！文法クイズ (測驗)
+                    </div>
+                    <div class="mt-4">
+                        ${quizzesHtml}
+                    </div>
+                    <div class="mt-6 text-center">
+                        <button onclick="checkAnswers(${setIndex})" class="bg-brown-text hover:bg-amber-900 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-md">
+                            解答を見る (看解答)
+                        </button>
+                    </div>
+                </div>
+            `;
+            return html;
+        }
+
+        // 顯示/隱藏參考選項
+        function toggleHints(cardId) {
+            const hintDiv = document.getElementById(`hints-${cardId}`);
+            if (hintDiv.classList.contains('hidden')) {
+                hintDiv.classList.remove('hidden');
+            } else {
+                hintDiv.classList.add('hidden');
+            }
+        }
+
+        // 檢查文法測驗答案
+        function checkAnswers(setIndex) {
+            const quizSet = grammarData[setIndex];
+            let allAnswered = true;
+
+            quizSet.forEach((quiz, qIndex) => {
+                const uniqueId = `quiz-${setIndex}-${qIndex}`;
+                const selected = document.querySelector(`input[name="${uniqueId}"]:checked`);
+                const resultDiv = document.getElementById(`result-${uniqueId}`);
+                
+                if (!selected) {
+                    allAnswered = false;
+                    return;
+                }
+
+                const selectedVal = parseInt(selected.value);
+                resultDiv.classList.remove('hidden');
+                
+                if (selectedVal === quiz.ans) {
+                    // 答對
+                    resultDiv.className = 'mt-4 p-4 rounded-xl text-sm font-medium fade-in bg-green-100 text-green-800 border border-green-200';
+                    resultDiv.innerHTML = `
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xl">⭕</span> <span class="font-bold text-lg">正解！</span>
+                        </div>
+                        <p class="mt-2 text-gray-700">${quiz.exp}</p>
+                    `;
+                } else {
+                    // 答錯
+                    resultDiv.className = 'mt-4 p-4 rounded-xl text-sm font-medium fade-in bg-red-50 text-red-800 border border-red-200';
+                    resultDiv.innerHTML = `
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xl">❌</span> <span class="font-bold text-lg">もう一度考えてみましょう。</span>
+                        </div>
+                        <p class="mt-1 text-gray-700">正確答案是：<strong>${quiz.options[quiz.ans]}</strong></p>
+                        <p class="mt-2 text-gray-700">${quiz.exp}</p>
+                    `;
+                }
+            });
+
+            if (!allAnswered) {
+                // 如果沒有全答完，可以顯示個小提示 (此處用客製化的對話框代替alert)
+                const msgBox = document.createElement('div');
+                msgBox.className = 'fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-amber-900 text-white px-6 py-3 rounded-full shadow-xl z-50 fade-in';
+                msgBox.innerText = '⚠️ 請回答所有問題喔！';
+                document.body.appendChild(msgBox);
+                setTimeout(() => {
+                    msgBox.remove();
+                }, 3000);
+            }
+        }
+
+        // 初始化頁面渲染
+        function renderApp() {
+            let htmlContent = '';
+            let quizIndex = 0;
+
+            for (let i = 0; i < interviewData.length; i++) {
+                // 渲染採訪問題
+                htmlContent += createInterviewCard(interviewData[i], i);
+
+                // 每2個問題，插入1組文法測驗 (即 i 為 1, 3, 5, 7, 9 時)
+                if ((i + 1) % 2 === 0 && quizIndex < grammarData.length) {
+                    htmlContent += createGrammarQuizCard(grammarData[quizIndex], quizIndex);
+                    quizIndex++;
+                }
+            }
+
+            contentContainer.innerHTML = htmlContent;
+        }
+
+        // 執行渲染
+        window.onload = renderApp;
+    </script>
+</body>
+</html>
